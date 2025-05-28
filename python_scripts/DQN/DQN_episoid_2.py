@@ -103,7 +103,7 @@ def DQN_tai_episoid(dqn2=None, existing_env=None ,total_episoid=0, episode=0, rp
             done = 1
             
         # 定期保存模型
-        if episode % 50 == 0:
+        if episode % 300 == 0:
             save_path = path_list['model_path_tai_DQN'] + f"/dqn_model_tai_{total_episoid}_{episode}.ckpt"
             print(f"保存模型到: {save_path}")
             torch.save(dqn2.eval_net, save_path)

@@ -16,39 +16,39 @@ MEMORY_CAPACITY = 100000
 
 # 路径配置
 path_list = {
-    'resetFlag': 'D:/my_project_1/python_scripts/resetFlag.txt',
-    'resetFlag1': 'D:/my_project_1/python_scripts/resetFlag1.txt',
-    'memory_graph': 'D:/my_project_1/python_scripts/GNN/memory/memory_graph.pkl',
-    'photo_path_real': 'D:/my_project_1/python_scripts',
-    'photo_path': 'D:/my_project_1/python_scripts/photo',
+    'resetFlag': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/resetFlag.txt',
+    'resetFlag1': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/resetFlag1.txt',
+    'memory_graph': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/GNN/memory/memory_graph.pkl',
+    'photo_path_real': 'H:/my_project_1/Multi-Stage_Hybrid_Training/controllers/Train_main/',
+    'photo_path': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/photo',
      
     #DQN 
-    'model_path_catch_DQN': 'D:/my_project_1/python_scripts/DQN/checkpoint/catch',
-    'model_path_tai_DQN': 'D:/my_project_1/python_scripts/DQN/checkpoint/tai',
-    'shu_ju_path_DQN':'D:/my_project_1/python_scripts/DQN/shu_ju.txt',
-    'gps_path_DQN':'D:/my_project_1/python_scripts/DQN/gps.txt',
-    'catch_log_path_DQN':'D:/my_project_1/python_scripts/DQN/log/catch_log/',
-    'tai_log_path_DQN':'D:/my_project_1/python_scripts/DQN/log/tai_log/',
+    'model_path_catch_DQN': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/DQN/checkpoint/catch',
+    'model_path_tai_DQN': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/DQN/checkpoint/tai',
+    'shu_ju_path_DQN':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/DQN/shu_ju.txt',
+    'gps_path_DQN':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/DQN/gps.txt',
+    'catch_log_path_DQN':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/DQN/log/catch_log/',
+    'tai_log_path_DQN':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/DQN/log/tai_log/',
 
     #PPO
-    'model_path_catch_PPO': 'D:/my_project_1/python_scripts/PPO/checkpoint/catch',
-    'model_path_tai_PPO': 'D:/my_project_1/python_scripts/PPO/checkpoint/tai',
-    'shu_ju_path_PPO':'D:/my_project_1/python_scripts/PPO/shu_ju.txt',
-    'gps_path_PPO':'D:/my_project_1/python_scripts/PPO/gps.txt',
-    'catch_log_path_PPO':'D:/my_project_1/python_scripts/PPO/log/catch_log/',
-    'tai_log_path_PPO':'D:/my_project_1/python_scripts/PPO/log/tai_log/',
+    'model_path_catch_PPO': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/PPO/checkpoint/catch',
+    'model_path_tai_PPO': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/PPO/checkpoint/tai',
+    'shu_ju_path_PPO':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/PPO/shu_ju.txt',
+    'gps_path_PPO':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/PPO/gps.txt',
+    'catch_log_path_PPO':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/PPO/log/catch_log/',
+    'tai_log_path_PPO':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/PPO/log/tai_log/',
 
     #SAC
-    'model_path_catch_SAC': 'D:/my_project_1/python_scripts/SAC/checkpoint/catch',
-    'model_path_tai_SAC': 'D:/my_project_1/python_scripts/SAC/checkpoint/tai',
-    'shu_ju_path_SAC':'D:/my_project_1/python_scripts/SAC/shu_ju.txt',
-    'gps_path_SAC':'D:/my_project_1/python_scripts/SAC/gps.txt',
-    'catch_log_path_SAC':'D:/my_project_1/python_scripts/SAC/log/catch_log/',
-    'tai_log_path_SAC':'D:/my_project_1/python_scripts/SAC/log/tai_log/'
+    'model_path_catch_SAC': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/SAC/checkpoint/catch',
+    'model_path_tai_SAC': 'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/SAC/checkpoint/tai',
+    'shu_ju_path_SAC':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/SAC/shu_ju.txt',
+    'gps_path_SAC':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/SAC/gps.txt',
+    'catch_log_path_SAC':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/SAC/log/catch_log/',
+    'tai_log_path_SAC':'H:/my_project_1/Multi-Stage_Hybrid_Training/python_scripts/SAC/log/tai_log/'
 
 }
 
-gps_goal = [0.2, 0.175]  # 目标位置坐标1
+gps_goal = [0.195, 0.155]  # 目标位置坐标1
 gps_goal1 = [0.27, 0.225]  # 目标位置坐标2
 # SAC超参数
 LR_ACTOR = 0.0001 # 策略网络学习率
@@ -59,7 +59,7 @@ class Darwin_config:
     # 添加最小高度和最小前进位置参数
     min_height = 0.2  # 夹爪最小高度
     min_forward = 0.18  # 夹爪最小前进位置
-    gps_goal = [0.2, 0.185]  # 目标位置（高度，前进）
+    gps_goal = [0.195, 0.155]  # 目标位置（高度，前进）
     standard_angle = -32.64359902756043  # 标准角度
     limit = [[-3.14, 3.14], [-3.14, 2.85], [-0.68, 2.30], [-2.25, 0.77], 
              [-1.65, 1.16], [-1.18, 1.63], [-2.42, 0.66], [-0.69, 2.50], 

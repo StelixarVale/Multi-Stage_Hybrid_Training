@@ -5,8 +5,8 @@ from PIL import Image
 import numpy as np
 import torch
 import shutil
-sys.path.append('D:/Webots/Webots2021a/Webots/projects/robots/robotis/darwin-op/libraries/python37')
-from managers import RobotisOp2GaitManager, RobotisOp2MotionManager
+sys.path.append('G:/Webots/projects/robots/robotis/darwin-op/libraries/python37')
+#from managers import RobotisOp2GaitManager, RobotisOp2MotionManager
 from python_scripts.Project_config import path_list
 
 class Darwin:
@@ -26,9 +26,9 @@ class Darwin:
         # 基础设备初始化
         self.robot = robot
         self.timestep = int(robot.getBasicTimeStep())
-        self.gaitManager = RobotisOp2GaitManager(robot, 'config.ini')
-        self.motionManager = RobotisOp2MotionManager(robot)
-        self.gaitManager.setBalanceEnable(True)
+        #self.gaitManager = RobotisOp2GaitManager(robot, 'config.ini')
+        #self.motionManager = RobotisOp2MotionManager(robot)
+        #self.gaitManager.setBalanceEnable(True)
         # 舵机列表初始化
         self.motors = []
         self.motors_sensors = []
@@ -260,34 +260,61 @@ class Darwin:
         # 确保目标目录存在
         os.makedirs(path_list['photo_path'], exist_ok=True)
         
-        # 直接保存到目标路径，而不是先保存后移动
+        # 使用内存缓冲区处理图像，避免直接文件操作导致的问题
         try:
-            # 如果文件已经存在于源路径，则尝试移动
+            # 如果文件已经存在于源路径，则尝试读取
             if os.path.exists(f"{path_list['photo_path_real']}/{img_name}"):
-                shutil.move(f"{path_list['photo_path_real']}/{img_name}", f"{path_list['photo_path']}/{img_name}")
-            # 如果文件不存在于源路径，则直接使用目标路径的文件
-            elif not os.path.exists(f"{path_list['photo_path']}/{img_name}"):
-                # 如果目标路径也没有文件，则复制一个空白图像作为替代
-                blank_img = Image.new('L', (128, 128), 255)  # 创建空白图像
-                blank_img.save(f"{path_list['photo_path']}/{img_name}")
+                # 使用二进制模式读取文件到内存
+                with open(f"{path_list['photo_path_real']}/{img_name}", 'rb') as f:
+                    img_data = f.read()
+                
+                # 使用BytesIO作为内存缓冲区
+                from io import BytesIO
+                buffer = BytesIO(img_data)
+                img = Image.open(buffer)
+            else:
+                # 如果源文件不存在，创建空白图像
+                img = Image.new('L', (128, 128), 255)  # 创建空白图像
         except Exception as e:
-            print(f"处理图像文件时出错: {e}")
-            
-        # 使用PIL库打开保存的图像文件
-        img = Image.open(f"{path_list['photo_path']}/{img_name}")   
-        # 将图像调整为128x128像素大小
+            print(f"读取图像文件时出错: {e}")
+            # 出错时创建空白图像作为备用
+            img = Image.new('L', (128, 128), 255)
+        
+        # 图像处理：调整大小和转换为灰度
         img = img.resize((128, 128))
-        # 将图像转换为灰度图像（单通道）
-        img = img.convert('L')  
-        # 将处理后的图像保存到指定路径，添加"1.png"后缀
-        os.makedirs(path_list['photo_path'], exist_ok=True)  # 确保保存路径存在
-        img.save(os.path.join(path_list['photo_path'], img_name))
+        img = img.convert('L')
+        
+        # 使用内存缓冲区保存处理后的图像
+        try:
+            # 创建内存缓冲区
+            from io import BytesIO
+            buffer = BytesIO()
+            # 将图像保存到缓冲区
+            img.save(buffer, format='PNG')
+            
+            # 将缓冲区内容写入文件
+            target_path = os.path.join(path_list['photo_path'], img_name)
+            with open(target_path, 'wb') as f:
+                f.write(buffer.getvalue())
+            
+            # 清理资源
+            buffer.close()
+        except Exception as e:
+            print(f"保存图像文件时出错: {e}")
+        
         # 将PIL图像转换为numpy数组，并归一化到0-1范围
         img_array = np.array(img) / 255.0
-        # 将numpy数组转换为PyTorch张量：
-        # - unsqueeze(0)添加batch维度
-        # - float()转换为浮点类型
-        img_tensor = torch.tensor(img_array).unsqueeze(0).float()   
+        
+        # 将numpy数组转换为PyTorch张量
+        try:
+            # 使用torch.cuda.empty_cache()清理GPU内存
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+            img_tensor = torch.tensor(img_array).unsqueeze(0).float()
+        except Exception as e:
+            print(f"创建张量时出错: {e}")
+            # 创建备用张量
+            img_tensor = torch.zeros((1, 128, 128), dtype=torch.float32)
         
         # 返回原始数组和处理后的张量
         return img_array, img_tensor

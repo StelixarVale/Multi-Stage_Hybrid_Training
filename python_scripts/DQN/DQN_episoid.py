@@ -127,6 +127,18 @@ def DQN_episoid(model_path=None):
     else:
         print("未找到已保存的抬腿模型，从头开始训练")
 
+    # 定义内存清理函数
+    def clean_memory():
+        """清理内存，释放未使用的资源"""
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            # 打印当前GPU内存使用情况
+            allocated = torch.cuda.memory_allocated() / (1024 ** 3)
+            reserved = torch.cuda.memory_reserved() / (1024 ** 3)
+            print(f"GPU内存使用: 已分配 {allocated:.2f} GB, 已保留 {reserved:.2f} GB")
+    
+
     #episode_num = episode_start  # 初始化回合计数器
     rpm = ReplayMemory(100000)  # 创建经验回放缓存
     rpm_2 = ReplayMemory_2(100000)
@@ -212,10 +224,11 @@ def DQN_episoid(model_path=None):
                 loss = dqn.learn(rpm)  # 学习
                 log_writer_catch.add(loss=loss)
                 # 每500步保存一次模型
-                if i % 500 == 0:
+                if i % 3000 == 0:
                     path = path_list['model_path_catch_DQN'] + '/dqn_model_%s.ckpt' % i
                     torch.save(dqn.eval_net, path)
                     print(f"保存模型: {path}")
+                    clean_memory()
                 print(loss)  # 打印损失值
                 # 写入总奖励
                 log_writer_catch.add(return_all=return_all)
