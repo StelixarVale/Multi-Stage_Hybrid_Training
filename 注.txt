@@ -1,0 +1,2 @@
+别忘了更改路径（需要更改路径的文件包括\controllers\new_ti_zi\new_ti_zi.py ,\python_scripts\Project_config.py ，
+\controllers\Train_main\Train_main.py 等等）
